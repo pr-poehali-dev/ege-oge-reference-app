@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
+import { useProgress } from "@/hooks/useProgress";
 
 const testQuestions = [
   {
@@ -54,6 +55,8 @@ export default function TestsPage() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300);
   const [timerActive, setTimerActive] = useState(false);
+  const { saveTestResult } = useProgress();
+  const savedRef = useRef(false);
 
   useEffect(() => {
     if (!timerActive || timeLeft <= 0) return;
@@ -74,6 +77,7 @@ export default function TestsPage() {
     setShowExplanation(false);
     setTimeLeft(300);
     setTimerActive(true);
+    savedRef.current = false;
   };
 
   const handleAnswer = (optionIndex: number) => {
@@ -89,6 +93,11 @@ export default function TestsPage() {
       setTimerActive(false);
       setAnswers(newAnswers);
       setPhase("results");
+      if (!savedRef.current) {
+        savedRef.current = true;
+        const correct = newAnswers.filter((a, i) => a === testQuestions[i]?.correct).length;
+        saveTestResult("mixed", correct, testQuestions.length);
+      }
     } else {
       setCurrentQ(currentQ + 1);
       setSelected(null);
@@ -99,6 +108,11 @@ export default function TestsPage() {
   const finishTest = () => {
     setTimerActive(false);
     setPhase("results");
+    if (!savedRef.current) {
+      savedRef.current = true;
+      const correct = answers.filter((a, i) => a === testQuestions[i]?.correct).length;
+      saveTestResult("mixed", correct, testQuestions.length);
+    }
   };
 
   const correctCount = answers.filter((a, i) => a === testQuestions[i]?.correct).length;

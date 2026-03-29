@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { subjects, tasks } from "@/data/subjects";
+import { useProgress } from "@/hooks/useProgress";
 
 const allTasks = [
   ...tasks,
@@ -32,6 +33,7 @@ export default function TasksPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [openTask, setOpenTask] = useState<number | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const { markTaskSolved, isTaskSolved } = useProgress();
 
   const filtered = allTasks.filter((t) => {
     const subjectMatch = selectedSubject === "all" || t.subjectId === selectedSubject;
@@ -92,11 +94,12 @@ export default function TasksPage() {
             const diff = difficultyConfig[task.difficulty as keyof typeof difficultyConfig];
             const isOpen = openTask === task.id;
             const isFav = favorites.includes(task.id);
+            const isSolved = isTaskSolved(task.id);
 
             return (
               <div
                 key={task.id}
-                className={`rounded-2xl border bg-card transition-all duration-300 animate-fade-in-up ${isOpen ? "border-primary/30" : "border-border hover:border-border/80"}`}
+                className={`rounded-2xl border bg-card transition-all duration-300 animate-fade-in-up ${isOpen ? "border-primary/30" : isSolved ? "border-emerald-500/20" : "border-border hover:border-border/80"}`}
                 style={{ animationDelay: `${i * 0.07}s` }}
               >
                 <div
@@ -105,8 +108,11 @@ export default function TasksPage() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                        <span className="text-xs font-bold font-mono-code text-primary">№{task.number}</span>
+                      <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${isSolved ? "bg-emerald-500/20 border border-emerald-500/30" : "bg-primary/10 border border-primary/20"}`}>
+                        {isSolved
+                          ? <Icon name="Check" size={16} className="text-emerald-400" />
+                          : <span className="text-xs font-bold font-mono-code text-primary">№{task.number}</span>
+                        }
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1.5">
@@ -158,12 +164,26 @@ export default function TasksPage() {
                         <p className="text-sm text-muted-foreground leading-relaxed">{task.explanation}</p>
                       </div>
 
-                      <div className="flex flex-wrap gap-1.5">
-                        {task.tags.map((tag) => (
-                          <span key={tag} className="text-xs px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border">
-                            #{tag}
-                          </span>
-                        ))}
+                      <div className="flex items-center justify-between flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {task.tags.map((tag) => (
+                            <span key={tag} className="text-xs px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); markTaskSolved(task.id); }}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border
+                            ${isSolved
+                              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 cursor-default"
+                              : "bg-secondary border-border text-muted-foreground hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400"
+                            }`}
+                          disabled={isSolved}
+                        >
+                          <Icon name={isSolved ? "CheckCircle" : "Circle"} size={14} />
+                          {isSolved ? "Решено" : "Отметить решённым"}
+                        </button>
                       </div>
                     </div>
                   </div>

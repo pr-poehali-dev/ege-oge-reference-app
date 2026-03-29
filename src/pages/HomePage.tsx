@@ -1,15 +1,16 @@
 import Icon from "@/components/ui/icon";
 import { subjects } from "@/data/subjects";
+import { useProgress } from "@/hooks/useProgress";
 
 interface HomePageProps {
   onNavigate: (section: string) => void;
 }
 
-const stats = [
-  { label: "Заданий в базе", value: "1 200+", icon: "FileText", color: "text-blue-400" },
-  { label: "Подробных разборов", value: "850+", icon: "Lightbulb", color: "text-amber-400" },
-  { label: "Предметов", value: "12", icon: "BookOpen", color: "text-emerald-400" },
-  { label: "Учеников готовятся", value: "4 800+", icon: "Users", color: "text-violet-400" },
+const BASE_STATS = [
+  { label: "Заданий в базе", valueKey: "base", value: "1 200+", icon: "FileText", color: "text-blue-400" },
+  { label: "Решено заданий", valueKey: "solved", value: "0", icon: "CheckCircle", color: "text-emerald-400" },
+  { label: "Предметов", valueKey: "subjects", value: "10", icon: "BookOpen", color: "text-amber-400" },
+  { label: "Тестов пройдено", valueKey: "tests", value: "0", icon: "ClipboardList", color: "text-violet-400" },
 ];
 
 const features = [
@@ -44,7 +45,10 @@ const features = [
 ];
 
 export default function HomePage({ onNavigate }: HomePageProps) {
-  const avgProgress = Math.round(subjects.reduce((acc, s) => acc + s.progress, 0) / subjects.length);
+  const { getSubjectProgress, totalSolved, totalTests } = useProgress();
+  const avgProgress = Math.round(
+    subjects.reduce((acc, s) => acc + getSubjectProgress(s.id), 0) / subjects.length
+  );
 
   return (
     <div className="min-h-screen">
@@ -91,16 +95,22 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       <section className="py-12 border-y border-border bg-card/50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, i) => (
-              <div
-                key={stat.label}
-                className={`text-center animate-fade-in-up`}
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <div className={`text-3xl sm:text-4xl font-black mb-1 ${stat.color}`}>{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
+            {BASE_STATS.map((stat, i) => {
+              const displayValue =
+                stat.valueKey === "solved" ? String(totalSolved) :
+                stat.valueKey === "tests" ? String(totalTests) :
+                stat.value;
+              return (
+                <div
+                  key={stat.label}
+                  className="text-center animate-fade-in-up"
+                  style={{ animationDelay: `${i * 0.1}s` }}
+                >
+                  <div className={`text-3xl sm:text-4xl font-black mb-1 ${stat.color}`}>{displayValue}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -118,26 +128,26 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {subjects.slice(0, 8).map((subject, i) => (
-            <div
-              key={subject.id}
-              onClick={() => onNavigate("subjects")}
-              className={`p-4 rounded-xl border ${subject.bgClass} card-hover cursor-pointer animate-fade-in-up`}
-              style={{ animationDelay: `${i * 0.07}s` }}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl">{subject.emoji}</span>
-                <span className={`text-xs font-mono-code font-medium ${subject.colorClass}`}>{subject.progress}%</span>
+          {subjects.slice(0, 8).map((subject, i) => {
+            const progress = getSubjectProgress(subject.id);
+            return (
+              <div
+                key={subject.id}
+                onClick={() => onNavigate("subjects")}
+                className={`p-4 rounded-xl border ${subject.bgClass} card-hover cursor-pointer animate-fade-in-up`}
+                style={{ animationDelay: `${i * 0.07}s` }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl">{subject.emoji}</span>
+                  <span className={`text-xs font-mono-code font-medium ${subject.colorClass}`}>{progress}%</span>
+                </div>
+                <div className="text-sm font-semibold text-foreground mb-2">{subject.name}</div>
+                <div className="h-1.5 bg-background/50 rounded-full overflow-hidden">
+                  <div className="progress-bar h-full" style={{ width: `${progress}%` }} />
+                </div>
               </div>
-              <div className="text-sm font-semibold text-foreground mb-2">{subject.name}</div>
-              <div className="h-1.5 bg-background/50 rounded-full overflow-hidden">
-                <div
-                  className="progress-bar h-full"
-                  style={{ width: `${subject.progress}%` }}
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

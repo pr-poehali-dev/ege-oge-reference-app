@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { subjects } from "@/data/subjects";
+import { useProgress } from "@/hooks/useProgress";
 
 interface SubjectsPageProps {
   onNavigate: (section: string, params?: Record<string, string>) => void;
@@ -9,6 +10,7 @@ interface SubjectsPageProps {
 export default function SubjectsPage({ onNavigate }: SubjectsPageProps) {
   const [filter, setFilter] = useState<"all" | "ЕГЭ" | "ОГЭ">("all");
   const [search, setSearch] = useState("");
+  const { getSubjectProgress } = useProgress();
 
   const filtered = subjects.filter((s) => {
     const matchFilter = filter === "all" || s.examType.includes(filter);
@@ -93,15 +95,20 @@ export default function SubjectsPage({ onNavigate }: SubjectsPageProps) {
                 )}
               </div>
 
-              <div>
-                <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-                  <span>Прогресс</span>
-                  <span className={`font-medium ${subject.colorClass}`}>{subject.progress}%</span>
-                </div>
-                <div className="h-1.5 bg-background/50 rounded-full overflow-hidden">
-                  <div className="progress-bar h-full" style={{ width: `${subject.progress}%` }} />
-                </div>
-              </div>
+              {(() => {
+                const progress = getSubjectProgress(subject.id);
+                return (
+                  <div>
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+                      <span>Прогресс</span>
+                      <span className={`font-medium ${subject.colorClass}`}>{progress}%</span>
+                    </div>
+                    <div className="h-1.5 bg-background/50 rounded-full overflow-hidden">
+                      <div className="progress-bar h-full" style={{ width: `${progress}%` }} />
+                    </div>
+                  </div>
+                );
+              })()}
 
               <div className="mt-4 flex items-center gap-1 text-sm text-muted-foreground group-hover:text-primary transition-colors">
                 <span>Перейти к заданиям</span>
