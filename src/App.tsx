@@ -1,28 +1,55 @@
-
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import Navigation from "@/components/Navigation";
+import HomePage from "@/pages/HomePage";
+import SubjectsPage from "@/pages/SubjectsPage";
+import TasksPage from "@/pages/TasksPage";
+import SolutionsPage from "@/pages/SolutionsPage";
+import ReferencePage from "@/pages/ReferencePage";
+import TestsPage from "@/pages/TestsPage";
+import ProgressPage from "@/pages/ProgressPage";
+import FavoritesPage from "@/pages/FavoritesPage";
 
-const queryClient = new QueryClient();
+type Section = "home" | "subjects" | "tasks" | "solutions" | "reference" | "tests" | "progress" | "favorites";
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+function AppContent() {
+  const [activeSection, setActiveSection] = useState<Section>("home");
+
+  const navigate = (section: string) => {
+    setActiveSection(section as Section);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderPage = () => {
+    switch (activeSection) {
+      case "home": return <HomePage onNavigate={navigate} />;
+      case "subjects": return <SubjectsPage onNavigate={navigate} />;
+      case "tasks": return <TasksPage />;
+      case "solutions": return <SolutionsPage />;
+      case "reference": return <ReferencePage />;
+      case "tests": return <TestsPage />;
+      case "progress": return <ProgressPage />;
+      case "favorites": return <FavoritesPage />;
+      default: return <HomePage onNavigate={navigate} />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation activeSection={activeSection} onNavigate={navigate} />
+      <main key={activeSection} className="animate-fade-in">
+        {renderPage()}
+      </main>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
     <TooltipProvider>
       <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AppContent />
     </TooltipProvider>
-  </QueryClientProvider>
-);
-
-export default App;
+  );
+}
