@@ -95,6 +95,30 @@ export const subjects = [
     progress: 85,
     topics: ["Алгоритмы", "Программирование", "Логика", "Числа", "Сети"],
   },
+  {
+    id: "geography",
+    name: "География",
+    emoji: "🌍",
+    color: "teal",
+    colorClass: "text-teal-400",
+    bgClass: "bg-teal-500/10 border-teal-500/20",
+    examType: ["ЕГЭ", "ОГЭ"],
+    taskCount: 24,
+    progress: 35,
+    topics: ["Природа России", "Население", "Хозяйство", "Страноведение", "Карты и координаты"],
+  },
+  {
+    id: "social",
+    name: "Обществознание",
+    emoji: "⚖️",
+    color: "orange",
+    colorClass: "text-orange-400",
+    bgClass: "bg-orange-500/10 border-orange-500/20",
+    examType: ["ЕГЭ", "ОГЭ"],
+    taskCount: 31,
+    progress: 50,
+    topics: ["Право", "Экономика", "Политика", "Социология", "Человек и общество"],
+  },
 ];
 
 export const tasks = [
