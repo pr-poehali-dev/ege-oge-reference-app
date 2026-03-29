@@ -1,18 +1,7 @@
 import { useState, useCallback } from "react";
 import { tasks as baseTasks } from "@/data/subjects";
 
-const allTaskIds = [
-  ...baseTasks.map((t) => ({ id: t.id, subjectId: t.subjectId })),
-  { id: 4, subjectId: "physics" },
-  { id: 5, subjectId: "chemistry" },
-  { id: 6, subjectId: "biology" },
-  { id: 7, subjectId: "geography" },
-  { id: 8, subjectId: "geography" },
-  { id: 9, subjectId: "geography" },
-  { id: 10, subjectId: "social" },
-  { id: 11, subjectId: "social" },
-  { id: 12, subjectId: "social" },
-];
+const allTaskIds = baseTasks.map((t) => ({ id: t.id, subjectId: t.subjectId }));
 
 const STORAGE_KEY = "ege_progress";
 

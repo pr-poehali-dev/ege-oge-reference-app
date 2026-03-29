@@ -3,24 +3,7 @@ import Icon from "@/components/ui/icon";
 import { subjects, tasks } from "@/data/subjects";
 import { useProgress } from "@/hooks/useProgress";
 
-const allTasks = [
-  ...tasks,
-  {
-    id: 4, subjectId: "physics", number: 3, title: "Закон Ома", difficulty: "easy", type: "ЕГЭ",
-    description: "В цепи с напряжением 12 В и сопротивлением 4 Ом найдите силу тока.",
-    answer: "3 А", explanation: "По закону Ома: I = U/R = 12/4 = 3 А", tags: ["электричество", "закон Ома"],
-  },
-  {
-    id: 5, subjectId: "chemistry", number: 7, title: "Типы реакций", difficulty: "medium", type: "ЕГЭ",
-    description: "Какой тип реакции: 2H₂ + O₂ → 2H₂O?",
-    answer: "Реакция соединения", explanation: "Из двух простых веществ образуется одно сложное — реакция соединения.", tags: ["типы реакций"],
-  },
-  {
-    id: 6, subjectId: "biology", number: 2, title: "Митоз и мейоз", difficulty: "hard", type: "ЕГЭ",
-    description: "В клетке 46 хромосом. Сколько хромосом в каждой дочерней клетке после митоза?",
-    answer: "46", explanation: "При митозе количество хромосом не меняется — каждая дочерняя клетка получает по 46 хромосом.", tags: ["клетка", "деление"],
-  },
-];
+const allTasks = [...tasks];
 
 const difficultyConfig = {
   easy: { label: "Лёгкое", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
