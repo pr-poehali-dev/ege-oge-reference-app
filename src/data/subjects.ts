@@ -8,7 +8,7 @@ export const subjects = [
     bgClass: "bg-blue-500/10 border-blue-500/20",
     examType: ["ЕГЭ", "ОГЭ"],
     taskCount: 38,
-    progress: 62,
+    progress: 0,
     topics: ["Алгебра", "Геометрия", "Теория вероятностей", "Функции", "Уравнения"],
   },
   {
@@ -20,7 +20,7 @@ export const subjects = [
     bgClass: "bg-amber-500/10 border-amber-500/20",
     examType: ["ЕГЭ", "ОГЭ"],
     taskCount: 27,
-    progress: 78,
+    progress: 0,
     topics: ["Орфография", "Пунктуация", "Синтаксис", "Лексика", "Сочинение"],
   },
   {
@@ -32,7 +32,7 @@ export const subjects = [
     bgClass: "bg-violet-500/10 border-violet-500/20",
     examType: ["ЕГЭ"],
     taskCount: 32,
-    progress: 45,
+    progress: 0,
     topics: ["Механика", "Термодинамика", "Электричество", "Оптика", "Квантовая физика"],
   },
   {
@@ -44,7 +44,7 @@ export const subjects = [
     bgClass: "bg-emerald-500/10 border-emerald-500/20",
     examType: ["ЕГЭ"],
     taskCount: 35,
-    progress: 30,
+    progress: 0,
     topics: ["Строение атома", "Реакции", "Органика", "Растворы", "Электролиз"],
   },
   {
@@ -56,7 +56,7 @@ export const subjects = [
     bgClass: "bg-green-500/10 border-green-500/20",
     examType: ["ЕГЭ", "ОГЭ"],
     taskCount: 28,
-    progress: 55,
+    progress: 0,
     topics: ["Клетка", "Генетика", "Эволюция", "Экология", "Анатомия"],
   },
   {
@@ -68,7 +68,7 @@ export const subjects = [
     bgClass: "bg-rose-500/10 border-rose-500/20",
     examType: ["ЕГЭ", "ОГЭ"],
     taskCount: 19,
-    progress: 40,
+    progress: 0,
     topics: ["Древняя Русь", "Империя", "СССР", "XX век", "Хронология"],
   },
   {
@@ -80,7 +80,7 @@ export const subjects = [
     bgClass: "bg-cyan-500/10 border-cyan-500/20",
     examType: ["ЕГЭ"],
     taskCount: 42,
-    progress: 68,
+    progress: 0,
     topics: ["Грамматика", "Чтение", "Аудирование", "Письмо", "Говорение"],
   },
   {
@@ -92,7 +92,7 @@ export const subjects = [
     bgClass: "bg-purple-500/10 border-purple-500/20",
     examType: ["ЕГЭ", "ОГЭ"],
     taskCount: 27,
-    progress: 85,
+    progress: 0,
     topics: ["Алгоритмы", "Программирование", "Логика", "Числа", "Сети"],
   },
   {
